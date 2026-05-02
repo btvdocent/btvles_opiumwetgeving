@@ -15,87 +15,132 @@
         }
 
         body {
-            font-family: 'Segoe UI', Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--light-gray);
             margin: 0;
             padding: 0;
             color: #333;
         }
 
-        /* Navigatie & Header */
+        /* Layout */
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: var(--white);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            position: relative;
+            min-height: 500px;
+        }
+
         header {
+            border-bottom: 3px solid var(--police-blue);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+        }
+
+        .goal-box {
+            background: #eef4fb;
+            border-left: 5px solid var(--police-gold);
+            padding: 15px;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        /* Forms & Inputs */
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        button {
             background-color: var(--police-blue);
             color: white;
-            padding: 20px;
-            text-align: center;
-            border-bottom: 4px solid var(--police-gold);
-        }
-
-        nav {
-            display: flex;
-            justify-content: center;
-            background: #002244;
-            padding: 10px;
-            gap: 10px;
-        }
-
-        nav button {
-            background: transparent;
-            color: white;
-            border: 1px solid var(--police-gold);
-            padding: 10px 20px;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
             cursor: pointer;
+            font-weight: bold;
             transition: 0.3s;
         }
 
-        nav button.active {
-            background: var(--police-gold);
-            color: var(--police-blue);
+        button:hover { background-color: #004a94; }
+
+        .btn-next {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: var(--police-gold);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
-        .container {
-            max-width: 1100px;
-            margin: 20px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        .btn-reset { background-color: var(--danger); margin-top: 20px; }
+
+        /* Steps */
+        .step { display: none; }
+        .step.active { display: block; }
+
+        /* Game Elements */
+        .timer {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--danger);
+            text-align: center;
+            margin: 10px 0;
         }
 
-        /* Utility classes */
+        .live-feed {
+            margin-top: 20px;
+            border: 1px solid #eee;
+            height: 200px;
+            overflow-y: auto;
+            padding: 10px;
+            background: #f9f9f9;
+        }
+
+        .response-item {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .correct { color: var(--success); font-weight: bold; }
+
+        /* Feedback Section */
+        .pv-output {
+            background: #fff;
+            border: 1px solid var(--police-blue);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .feedback-item {
+            margin-left: 20px;
+            font-size: 0.9em;
+            color: #555;
+            border-left: 2px solid var(--police-gold);
+            padding-left: 10px;
+            margin-top: 5px;
+        }
+
         .hidden { display: none; }
-        .reset-btn { background-color: var(--danger); color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; float: right; margin-bottom: 10px; }
-        .goal-box { background: #fff9e6; border-left: 5px solid var(--police-gold); padding: 15px; margin-bottom: 20px; font-style: italic; }
-        
-        /* Forms & Inputs */
-        input, select, textarea { width: 100%; padding: 12px; margin: 10px 0; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; font-size: 16px; }
-        button.primary { background-color: var(--police-blue); color: white; border: none; padding: 12px 25px; cursor: pointer; font-weight: bold; border-radius: 4px; }
-        button.primary:hover { opacity: 0.9; }
-
-        /* Step Specifics */
-        .live-feed { margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px; }
-        .post { background: #f9f9f9; border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 6px; }
-        .post-header { font-weight: bold; color: var(--police-blue); display: flex; justify-content: space-between; border-bottom: 1px solid #eee; margin-bottom: 10px; }
-        
-        .feedback-item { background: #eef4fb; padding: 8px; margin-top: 5px; border-radius: 4px; font-size: 0.9em; }
-
-        .scenario-box { background: #eef4fb; padding: 20px; border-radius: 6px; margin: 20px 0; border-left: 5px solid var(--police-blue); }
-
-        #login-screen { text-align: center; padding: 100px 20px; }
-        #login-screen .inner { max-width: 400px; margin: 0 auto; background: white; padding: 40px; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>BTV Live Training: Operationeel Rapporteren</h1>
-</header>
-
-<div id="login-screen">
-    <div class="inner">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Politie-embleem.svg/1200px-Politie-embleem.svg.png" alt="Logo" width="80">
-        <h2>Inloggen Verbalisanten</h2>
-        <input type="text" id="user-name" placeholder="Uw achternaam">
+<div class="container">
+    <div id="step-0" class="step active">
+        <header><h1>BTV: Inloggen Politieacademie</h1></header>
+        <p>Voer je achternaam in en kies je klas:</p>
+        <input type="text" id="user-name" placeholder="Achternaam">
         <select id="class-select">
             <option value="">-- Selecteer NATO-klas --</option>
             <option>ALPHA</option><option>BRAVO</option><option>CHARLIE</option>
@@ -103,86 +148,73 @@
             <option>GOLF</option><option>HOTEL</option><option>JULIET</option>
             <option>KILO</option><option>LIMA</option><option>MIKE</option>
         </select>
-        <button class="primary" onclick="app.login()">Start Dienst</button>
+        <button onclick="app.login()">Start Les</button>
     </div>
-</div>
 
-<div id="main-app" class="hidden">
-    <nav>
-        <button id="nav1" class="active" onclick="app.showStep(1)">Stap 1: OVT</button>
-        <button id="nav2" onclick="app.showStep(2)">Stap 2: Samenstellingen</button>
-        <button id="nav3" onclick="app.showStep(3)">Stap 3: Drugs & Wetenschap</button>
-    </nav>
-
-    <div class="container">
-        <div id="user-bar" style="margin-bottom: 20px; color: var(--police-gold); font-weight: bold;"></div>
-
-        <section id="step1">
-            <button class="reset-btn" onclick="app.reset('step1')">Reset Stap 1</button>
-            <div class="goal-box">
-                <strong>Opdracht 1:</strong> Zet de tekst om naar de Onvoltooid Verleden Tijd (OVT).<br>
-                <strong>Leerdoel:</strong> Correct gebruik van de OVT in ambtelijke verslaglegging voor een zakelijke en feitelijke toon.
-            </div>
-            
-            <div class="scenario-box">
-                <p><strong>Tekst in VTT (fout):</strong> "Ik heb de verdachte staande gehouden. Hij heeft zijn rijbewijs niet kunnen tonen. Ik heb hem daarop aangehouden."</p>
-                <p><em>Zet dit om naar OVT en wees de snelste van de klas!</em></p>
-            </div>
-
-            <textarea id="input1" placeholder="Schrijf hier uw tekst in OVT..."></textarea>
-            <button class="primary" onclick="app.submit(1)">Publiceer Live</button>
-
-            <div class="live-feed" id="feed1"></div>
-        </section>
-
-        <section id="step2" class="hidden">
-            <button class="reset-btn" onclick="app.reset('step2')">Reset Stap 2</button>
-            <div class="goal-box">
-                <strong>Opdracht 2:</strong> Maak correcte samenstellingen van de losse woorden.<br>
-                <strong>Leerdoel:</strong> Foutloos schrijven van complexe politietermen en samengestelde werkwoorden.
-            </div>
-
-            <div class="scenario-box">
-                <p>Combineer: <strong>[alcohol] + [gehalte]</strong> en <strong>[ter] + [plaatse] + [komen]</strong> en <strong>[stop] + [teken]</strong>.</p>
-            </div>
-
-            <input type="text" id="input2" placeholder="Typ de drie woorden correct achter elkaar...">
-            <button class="primary" onclick="app.submit(2)">Verstuur Antwoord</button>
-
-            <div class="live-feed" id="feed2"></div>
-        </section>
-
-        <section id="step3" class="hidden">
-            <button class="reset-btn" onclick="app.reset('step3')">Reset Database</button>
-            <div class="goal-box">
-                <strong>Opdracht 3:</strong> Drugs beschrijven in Redenen van Wetenschap.<br>
-                <strong>Leerdoel:</strong> Objectief waarnemingen vastleggen (zien, horen, ruiken, voelen) zonder directe conclusies te trekken.
-            </div>
-
-            <h3>Stap 3A: De Theorie</h3>
-            <p><em>Tip: Zoek in je 'Zakboek proces-verbaal en bewijsrecht'.</em></p>
-            <input type="text" id="input3a" placeholder="Wat leg je vast in je PV van bevindingen bij drugs?">
-
-            <hr>
-
-            <h3>Stap 3B: De Praktijkcasus</h3>
-            <div class="scenario-box">
-                <p><strong>Situatie:</strong> Tijdens een verkeerscontrole op de A2 zie je in het dashboardkastje een doorzichtig gripzakje liggen. Er zit een groene, gedroogde, plantachtige substantie in. Je ruikt een indringende, zoetige geur die je herkent als de geur van hennep. Het zakje weegt ongeveer 5 gram.</p>
-            </div>
-
-            <textarea id="input3b" placeholder="Beschrijf de vondst in redenen van wetenschap..."></textarea>
-            <button class="primary" onclick="app.submit(3)">Publiceer Verslag</button>
-
-            <div class="live-feed" id="feed3"></div>
-        </section>
+    <div id="step-1" class="step">
+        <header><h2>Stap 1: Onvoltooid Verleden Tijd (OVT)</h2></header>
+        <div class="goal-box"><strong>Leerdoel:</strong> Correct verbaliseren in de OVT om feiten uit het verleden objectief en professioneel vast te leggen.</div>
+        <div id="q1-container">
+            <p>Zet de werkwoorden in de onderstaande zin om naar de **OVT**:</p>
+            <h3 id="q1-text">Laden...</h3>
+            <input type="text" id="q1-input" placeholder="Typ de gecorrigeerde zin...">
+            <button onclick="app.submitAnswer(1)">Verstuur</button>
+        </div>
+        <div class="timer" id="timer-1">30</div>
+        <div class="live-feed" id="feed-1"></div>
     </div>
+
+    <div id="step-2" class="step">
+        <header><h2>Stap 2: Samenstellingen & Werkwoorden</h2></header>
+        <div class="goal-box"><strong>Leerdoel:</strong> Foutloos schrijven van complexe politietermen en samengestelde werkwoorden.</div>
+        <div id="q2-container">
+            <p>Verbeter de samenstellingen in de onderstaande zin:</p>
+            <h3 id="q2-text">Laden...</h3>
+            <input type="text" id="q2-input" placeholder="Typ de gecorrigeerde zin...">
+            <button onclick="app.submitAnswer(2)">Verstuur</button>
+        </div>
+        <div class="timer" id="timer-2">30</div>
+        <div class="live-feed" id="feed-2"></div>
+    </div>
+
+    <div id="step-3" class="step">
+        <header><h2>Stap 3: Objectief Beschrijven (Drugs)</h2></header>
+        <div class="goal-box"><strong>Leerdoel:</strong> Het beschrijven van bewijsmateriaal in 'redenen van wetenschap' (waarnemingen).</div>
+        
+        <div id="step-3A">
+            <h3>Vraag 3A: Theorie</h3>
+            <p><strong>Wat leg je vast in je proces-verbaal van bevindingen, wanneer je drugs aantreft?</strong></p>
+            <small>Tip: Raadpleeg je Zakboek Proces-verbaal en Bewijsrecht.</small>
+            <input type="text" id="q3a-input" placeholder="Uw antwoord...">
+            <button onclick="app.submitPVPart('A')">Bevestig</button>
+        </div>
+
+        <div id="step-3B" class="hidden">
+            <h3>Vraag 3B: Casus "De Geur van Hennep"</h3>
+            <p><strong>Situatie:</strong> Tijdens een verkeerscontrole op de A12 stop je een voertuig. Je ruikt een sterke, kenmerkende geur van hennep. Onder de bijrijdersstoel vind je een doorzichtige gripzak met een groene, gedroogde, plantaardige substantie.</p>
+            <p><em>Opdracht: Beschrijf de vondst objectief in redenen van wetenschap.</em></p>
+            <textarea id="q3b-input" placeholder="Ik zag dat... Ik rook dat..."></textarea>
+            <button onclick="app.submitPVPart('B')">Publiceer Verslag</button>
+        </div>
+
+        <div id="live-pv-area">
+            <h3>Gepubliceerde Verslagen</h3>
+            <div id="pv-feed"></div>
+        </div>
+    </div>
+
+    <div id="docent-controls" class="hidden">
+        <button class="btn-reset" onclick="app.resetStep()">Reset Huidige Stap</button>
+        <button id="next-q-btn" onclick="app.nextQuestion()">Volgende Zin</button>
+    </div>
+
+    <button id="nav-next" class="btn-next hidden" onclick="app.nextStep()">Volgende Stap →</button>
 </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+    import { getDatabase, ref, set, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-    // UW CONFIGURATIE
     const firebaseConfig = {
         apiKey: "AIzaSyCCTemDDut8gP3y_S8K4Ss6iVy9ND73aEo",
         authDomain: "lessenbtvdocent.firebaseapp.com",
@@ -196,118 +228,201 @@
     const firebaseApp = initializeApp(firebaseConfig);
     const db = getDatabase(firebaseApp);
 
+    const questionsStep1 = [
+        { q: "Ik heb de verdachte staande gehouden.", a: "Ik hield de verdachte staande." },
+        { q: "De getuige heeft een verklaring afgelegd.", a: "De getuige legde een verklaring af." },
+        { q: "Wij zijn ter plaatse gekomen.", a: "Wij kwamen ter plaatse." },
+        { q: "De agent heeft de boeien omgedaan.", a: "De agent deed de boeien om." },
+        { q: "Ik heb de pepperspray gebruikt.", a: "Ik gebruikte de pepperspray." },
+        { q: "De bestuurder is weggereden.", a: "De bestuurder reed weg." },
+        { q: "Hij heeft het bevel genegeerd.", a: "Hij negeerde het bevel." },
+        { q: "Wij hebben de auto doorzocht.", a: "Wij doorzochten de auto." },
+        { q: "De verdachte heeft bekend.", a: "De verdachte bekende." },
+        { q: "Ik heb assistentie gevraagd.", a: "Ik vroeg assistentie." }
+    ];
+
+    const questionsStep2 = [
+        { q: "De adem analyse test was positief.", a: "De ademanalysetest was positief." },
+        { q: "Het proces verbaal is opgemaakt.", a: "Het proces-verbaal is opgemaakt." },
+        { q: "De verdachte wilde mee werken.", a: "De verdachte wilde meewerken." },
+        { q: "Hij gaf een vals identiteits bewijs.", a: "Hij gaf een vals identiteitsbewijs." },
+        { q: "De recherche is de drugs afval aan het ruimen.", a: "De recherche is het drugsafval aan het ruimen." },
+        { q: "Ik gaf hem een stop teken.", a: "Ik gaf hem een stopteken." },
+        { q: "Hij wilde de boete niet betalen.", a: "Hij wilde de boete niet betalen." },
+        { q: "De hoofd inspecteur kwam langs.", a: "De hoofdinspecteur kwam langs." },
+        { q: "Er was sprake van huis vrede breuk.", a: "Er was sprake van huisvredebreuk." },
+        { q: "De dader is aan gehouden.", a: "De dader is aangehouden." }
+    ];
+
     const app = {
-        user: { name: "", class: "" },
+        user: null,
+        currentStep: 0,
+        currentQIndex: 0,
+        timer: 30,
+        timerInterval: null,
 
-        login() {
-            const n = document.getElementById('user-name').value;
-            const c = document.getElementById('class-select').value;
-            if(!n || !c) return alert("Naam en klas verplicht!");
-            this.user = { name: n, class: c };
-            document.getElementById('login-screen').classList.add('hidden');
-            document.getElementById('main-app').classList.remove('hidden');
-            document.getElementById('user-bar').innerText = `Agent in opleiding: ${n} | Klas: ${c}`;
-            this.initListeners();
-        },
-
-        showStep(step) {
-            [1,2,3].forEach(s => {
-                document.getElementById(`step${s}`).classList.add('hidden');
-                document.getElementById(`nav${s}`).classList.remove('active');
-            });
-            document.getElementById(`step${step}`).classList.remove('hidden');
-            document.getElementById(`nav${step}`).classList.add('active');
-        },
-
-        async submit(step) {
-            let data = {
-                naam: this.user.name,
-                klas: this.user.class,
-                timestamp: Date.now()
-            };
-
-            if(step === 1) data.tekst = document.getElementById('input1').value;
-            if(step === 2) data.tekst = document.getElementById('input2').value;
-            if(step === 3) {
-                data.theorie = document.getElementById('input3a').value;
-                data.tekst = document.getElementById('input3b').value;
-            }
-
-            if(!data.tekst) return alert("Veld mag niet leeg zijn!");
-            await push(ref(db, `step${step}`), data);
+        login: () => {
+            const name = document.getElementById('user-name').value;
+            const klas = document.getElementById('class-select').value;
+            if(!name || !klas) return alert("Naam en klas verplicht!");
             
-            // Clear inputs
-            if(step === 1) document.getElementById('input1').value = "";
-            if(step === 2) document.getElementById('input2').value = "";
-            if(step === 3) {
-                document.getElementById('input3a').value = "";
-                document.getElementById('input3b').value = "";
+            app.user = { name, klas, isDocent: name === "DOCENT" };
+            if(app.user.isDocent) document.getElementById('docent-controls').classList.remove('hidden');
+            
+            app.nextStep();
+        },
+
+        nextStep: () => {
+            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
+            app.currentStep++;
+            document.getElementById(`step-${app.currentStep}`).classList.add('active');
+            
+            if(app.currentStep < 3) {
+                app.loadQuestion();
+                app.startTimer();
+            }
+            if(app.currentStep === 3) {
+                document.getElementById('nav-next').classList.add('hidden');
+                app.listenToPV();
             }
         },
 
-        async submitFeedback(postId) {
-            const fbText = document.getElementById(`fb-in-${postId}`).value;
-            if(!fbText) return;
-            await push(ref(db, `step3/${postId}/feedback`), {
-                naam: this.user.name,
-                klas: this.user.class,
-                tekst: fbText
+        loadQuestion: () => {
+            const list = app.currentStep === 1 ? questionsStep1 : questionsStep2;
+            const q = list[app.currentQIndex];
+            document.getElementById(`q${app.currentStep}-text`).innerText = q.q;
+            document.getElementById(`q${app.currentStep}-input`).value = "";
+            app.listenToAnswers();
+        },
+
+        startTimer: () => {
+            clearInterval(app.timerInterval);
+            app.timer = 30;
+            const display = document.getElementById(`timer-${app.currentStep}`);
+            app.timerInterval = setInterval(() => {
+                app.timer--;
+                display.innerText = app.timer;
+                if(app.timer <= 0) {
+                    clearInterval(app.timerInterval);
+                    if(app.user.isDocent) app.nextQuestion();
+                }
+            }, 1000);
+        },
+
+        submitAnswer: (step) => {
+            const ans = document.getElementById(`q${step}-input`).value;
+            const list = step === 1 ? questionsStep1 : questionsStep2;
+            const isCorrect = ans.trim().toLowerCase() === list[app.currentQIndex].a.toLowerCase();
+            
+            set(ref(db, `responses/step${step}/q${app.currentQIndex}/${app.user.name}`), {
+                ans, isCorrect, klas: app.user.klas
             });
-            document.getElementById(`fb-in-${postId}`).value = "";
         },
 
-        reset(stepPath) {
-            if(confirm(`Weet je zeker dat je alle data van ${stepPath} wilt wissen?`)) {
-                remove(ref(db, stepPath));
-            }
-        },
-
-        initListeners() {
-            // Listeners voor elke stap
-            [1,2,3].forEach(s => {
-                onValue(ref(db, `step${s}`), (snapshot) => {
-                    const container = document.getElementById(`feed${s}`);
-                    container.innerHTML = "<h4>Live Antwoorden:</h4>";
-                    const data = snapshot.val();
-                    if(!data) return;
-
-                    Object.keys(data).reverse().forEach(key => {
-                        const item = data[key];
+        listenToAnswers: () => {
+            onValue(ref(db, `responses/step${app.currentStep}/q${app.currentQIndex}`), (snap) => {
+                const feed = document.getElementById(`feed-${app.currentStep}`);
+                feed.innerHTML = "";
+                const data = snap.val();
+                if(data) {
+                    Object.values(data).forEach(res => {
                         const div = document.createElement('div');
-                        div.className = 'post';
-                        
-                        let html = `
-                            <div class="post-header">
-                                <span>${item.naam} [${item.klas}]</span>
-                                <span>${new Date(item.timestamp).toLocaleTimeString()}</span>
-                            </div>
-                            <p>${item.tekst}</p>
-                        `;
-
-                        if(s === 3) {
-                            html += `<p><strong>Theorie:</strong> ${item.theorie}</p><hr>`;
-                            html += `<strong>Feedback:</strong><div id="fb-list-${key}">`;
-                            if(item.feedback) {
-                                Object.values(item.feedback).forEach(f => {
-                                    html += `<div class="feedback-item"><strong>${f.naam}:</strong> ${f.tekst}</div>`;
-                                });
-                            }
-                            html += `</div>
-                                <div style="display:flex; gap:5px; margin-top:10px;">
-                                    <input type="text" id="fb-in-${key}" placeholder="Geef feedback..." style="margin:0;">
-                                    <button onclick="app.submitFeedback('${key}')">OK</button>
-                                </div>`;
-                        }
-                        div.innerHTML = html;
-                        container.appendChild(div);
+                        div.className = 'response-item';
+                        div.innerHTML = `<span>${res.klas} - ${res.ans}</span> <span class="${res.isCorrect ? 'correct' : ''}">${res.isCorrect ? '✓' : ''}</span>`;
+                        feed.appendChild(div);
                     });
-                });
+                }
             });
+        },
+
+        nextQuestion: () => {
+            app.currentQIndex++;
+            if(app.currentQIndex >= 10) {
+                document.getElementById('nav-next').classList.remove('hidden');
+                alert("Ronde voltooid! Klik op 'Volgende Stap' om door te gaan.");
+            } else {
+                app.loadQuestion();
+                app.startTimer();
+            }
+        },
+
+        // Stap 3 Logica
+        submitPVPart: (part) => {
+            if(part === 'A') {
+                document.getElementById('step-3A').classList.add('hidden');
+                document.getElementById('step-3B').classList.remove('hidden');
+            } else {
+                const txt = document.getElementById('q3b-input').value;
+                push(ref(db, `pv_reports`), {
+                    name: app.user.name,
+                    klas: app.user.klas,
+                    text: txt,
+                    timestamp: Date.now()
+                });
+                document.getElementById('q3b-input').value = "";
+            }
+        },
+
+        listenToPV: () => {
+            onValue(ref(db, `pv_reports`), (snap) => {
+                const feed = document.getElementById('pv-feed');
+                feed.innerHTML = "";
+                const data = snap.val();
+                if(data) {
+                    Object.entries(data).forEach(([key, val]) => {
+                        const div = document.createElement('div');
+                        div.className = 'pv-output';
+                        div.innerHTML = `
+                            <strong>${val.klas} - ${val.name}</strong>
+                            <p>${val.text}</p>
+                            <div id="fb-list-${key}"></div>
+                            <div style="display:flex; gap:5px;">
+                                <input type="text" id="fb-in-${key}" placeholder="Geef feedback...">
+                                <button onclick="app.submitFeedback('${key}')">Stuur</button>
+                            </div>
+                        `;
+                        feed.appendChild(div);
+                        app.listenToFeedback(key);
+                    });
+                }
+            });
+        },
+
+        submitFeedback: (pvId) => {
+            const fbTxt = document.getElementById(`fb-in-${pvId}`).value;
+            push(ref(db, `pv_reports/${pvId}/feedback`), {
+                name: app.user.name,
+                text: fbTxt
+            });
+            document.getElementById(`fb-in-${pvId}`).value = "";
+        },
+
+        listenToFeedback: (pvId) => {
+            onValue(ref(db, `pv_reports/${pvId}/feedback`), (snap) => {
+                const list = document.getElementById(`fb-list-${pvId}`);
+                list.innerHTML = "";
+                const data = snap.val();
+                if(data) {
+                    Object.values(data).forEach(fb => {
+                        const p = document.createElement('p');
+                        p.className = 'feedback-item';
+                        p.innerHTML = `<strong>${fb.name}:</strong> ${fb.text}`;
+                        list.appendChild(p);
+                    });
+                }
+            });
+        },
+
+        resetStep: () => {
+            if(!confirm("Weet je zeker dat je alle data voor deze stap wilt wissen?")) return;
+            const path = app.currentStep === 3 ? 'pv_reports' : `responses/step${app.currentStep}`;
+            remove(ref(db, path));
+            app.currentQIndex = 0;
+            if(app.currentStep < 3) app.loadQuestion();
         }
     };
 
-    window.app = app; // Expose to global scope for button clicks
+    window.app = app;
 </script>
-
 </body>
 </html>
