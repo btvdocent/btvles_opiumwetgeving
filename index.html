@@ -3,212 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Q3 BTV Les Opiumwetgeving</title>
+    <title>Q3 Les Opiumwetgeving</title>
     <style>
         :root {
             --police-blue: #003366;
             --police-gold: #c5a059;
             --light-gray: #f4f4f9;
+            --white: #ffffff;
             --danger: #dc3545;
             --success: #198754;
-            --white: #ffffff;
         }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--light-gray);
-            margin: 0;
-            padding: 0;
-            color: #333;
-        }
-
-        /* Layout */
-        .container {
-            max-width: 900px;
-            margin: 40px auto;
-            background: var(--white);
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            position: relative;
-            min-height: 500px;
-        }
-
-        header {
-            border-bottom: 3px solid var(--police-blue);
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-        }
-
-        .goal-box {
-            background: #eef4fb;
-            border-left: 5px solid var(--police-gold);
-            padding: 15px;
-            margin-bottom: 20px;
-            font-style: italic;
-        }
-
-        /* Forms & Inputs */
-        input, select, textarea {
-            width: 100%;
-            padding: 12px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            box-sizing: border-box;
-            font-size: 16px;
-        }
-
-        button {
-            background-color: var(--police-blue);
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-        }
-
-        button:hover { background-color: #004a94; }
-
-        .btn-next {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background-color: var(--police-gold);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
-
-        .btn-reset { background-color: var(--danger); margin-top: 20px; }
-
-        /* Steps */
-        .step { display: none; }
-        .step.active { display: block; }
-
-        /* Game Elements */
-        .timer {
-            font-size: 24px;
-            font-weight: bold;
-            color: var(--danger);
-            text-align: center;
-            margin: 10px 0;
-        }
-
-        .live-feed {
-            margin-top: 20px;
-            border: 1px solid #eee;
-            height: 200px;
-            overflow-y: auto;
-            padding: 10px;
-            background: #f9f9f9;
-        }
-
-        .response-item {
-            padding: 8px;
-            border-bottom: 1px solid #ddd;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .correct { color: var(--success); font-weight: bold; }
-
-        /* Feedback Section */
-        .pv-output {
-            background: #fff;
-            border: 1px solid var(--police-blue);
-            padding: 15px;
-            margin: 15px 0;
-            border-radius: 4px;
-        }
-
-        .feedback-item {
-            margin-left: 20px;
-            font-size: 0.9em;
-            color: #555;
-            border-left: 2px solid var(--police-gold);
-            padding-left: 10px;
-            margin-top: 5px;
-        }
-
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--light-gray); margin: 0; padding: 0; color: #333; }
+        .container { max-width: 1000px; margin: 20px auto; background: var(--white); padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); position: relative; }
+        
+        /* Header & Nav */
+        h1, h2, h3 { color: var(--police-blue); border-bottom: 2px solid var(--police-gold); padding-bottom: 10px; }
+        .assignment-box { background: #eef4fb; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 5px solid var(--police-blue); }
+        
+        /* UI Elements */
         .hidden { display: none; }
+        .btn { padding: 12px 24px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; }
+        .btn-blue { background: var(--police-blue); color: white; }
+        .btn-gold { background: var(--police-gold); color: white; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-next { position: fixed; bottom: 20px; right: 20px; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        
+        /* Game Elements */
+        .timer { font-size: 24px; font-weight: bold; color: var(--danger); text-align: center; margin: 10px 0; }
+        .arena { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-top: 20px; background: #f1f1f1; padding: 15px; border-radius: 8px; min-height: 100px; }
+        .answer-card { background: white; padding: 10px; border-radius: 4px; border: 1px solid #ddd; font-size: 0.9em; box-shadow: 2px 2px 5px rgba(0,0,0,0.05); animation: popIn 0.3s ease; }
+        .answer-card b { color: var(--police-blue); }
+
+        /* Feedback System */
+        .pv-post { border: 1px solid #ddd; padding: 15px; margin: 15px 0; border-radius: 8px; }
+        .feedback-item { margin-left: 20px; background: #fff9e6; padding: 8px; border-radius: 4px; font-size: 0.85em; margin-top: 5px; border-left: 3px solid var(--police-gold); }
+
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        
+        #login-screen { text-align: center; padding: 50px 0; }
+        input, select, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div id="step-0" class="step active">
-        <header><h1>BTV: Inloggen Politieacademie</h1></header>
-        <p>Voer je achternaam in en kies je klas:</p>
-        <input type="text" id="user-name" placeholder="Achternaam">
-        <select id="class-select">
-            <option value="">-- Selecteer NATO-klas --</option>
-            <option>ALPHA</option><option>BRAVO</option><option>CHARLIE</option>
-            <option>DELTA</option><option>ECHO</option><option>FOXTROT</option>
-            <option>GOLF</option><option>HOTEL</option><option>JULIET</option>
-            <option>KILO</option><option>LIMA</option><option>MIKE</option>
-        </select>
-        <button onclick="app.login()">Start Les</button>
-    </div>
+    <button class="btn btn-danger" style="position:absolute; top:10px; right:10px;" id="resetBtn">Docent: Reset Alles</button>
 
-    <div id="step-1" class="step">
-        <header><h2>Stap 1: Onvoltooid Verleden Tijd (OVT)</h2></header>
-        <div class="goal-box"><strong>Leerdoel:</strong> Correct verbaliseren in de OVT om feiten uit het verleden objectief en professioneel vast te leggen.</div>
-        <div id="q1-container">
-            <p>Zet de werkwoorden in de onderstaande zin om naar de **OVT**:</p>
-            <h3 id="q1-text">Laden...</h3>
-            <input type="text" id="q1-input" placeholder="Typ de gecorrigeerde zin...">
-            <button onclick="app.submitAnswer(1)">Verstuur</button>
+    <div id="screen-login">
+        <h1>BTV Interactieve Training</h1>
+        <div id="login-screen">
+            <input type="text" id="user-name" placeholder="Achternaam Verbalisant">
+            <select id="class-select">
+                <option value="">-- Selecteer NATO-klas --</option>
+                <option>ALPHA</option><option>BRAVO</option><option>CHARLIE</option>
+                <option>DELTA</option><option>ECHO</option><option>FOXTROT</option>
+                <option>GOLF</option><option>HOTEL</option><option>JULIET</option>
+                <option>KILO</option><option>LIMA</option><option>MIKE</option>
+            </select>
+            <button class="btn btn-blue" id="loginBtn">Start Training</button>
         </div>
-        <div class="timer" id="timer-1">30</div>
-        <div class="live-feed" id="feed-1"></div>
     </div>
 
-    <div id="step-2" class="step">
-        <header><h2>Stap 2: Samenstellingen & Werkwoorden</h2></header>
-        <div class="goal-box"><strong>Leerdoel:</strong> Foutloos schrijven van complexe politietermen en samengestelde werkwoorden.</div>
-        <div id="q2-container">
-            <p>Verbeter de samenstellingen in de onderstaande zin:</p>
-            <h3 id="q2-text">Laden...</h3>
-            <input type="text" id="q2-input" placeholder="Typ de gecorrigeerde zin...">
-            <button onclick="app.submitAnswer(2)">Verstuur</button>
+    <div id="screen-step1" class="hidden">
+        <div class="assignment-box">
+            <h3>Stap 1: Onvoltooid Verleden Tijd (OVT)</h3>
+            <p><b>Doel:</b> Leer feiten in een PV te beschrijven in de OVT (verhalend) in plaats van de VTT.</p>
+            <p>Zet de onderstaande zin om naar de OVT. Snelheid telt!</p>
         </div>
-        <div class="timer" id="timer-2">30</div>
-        <div class="live-feed" id="feed-2"></div>
+        <div class="timer" id="timer1">30</div>
+        <h2 id="sentence1">Laden...</h2>
+        <input type="text" id="input1" placeholder="Typ hier de zin in OVT...">
+        <button class="btn btn-blue" id="send1">Verzend Antwoord</button>
+        <div class="arena" id="arena1"></div>
     </div>
 
-    <div id="step-3" class="step">
-        <header><h2>Stap 3: Objectief Beschrijven (Drugs)</h2></header>
-        <div class="goal-box"><strong>Leerdoel:</strong> Het beschrijven van bewijsmateriaal in 'redenen van wetenschap' (waarnemingen).</div>
+    <div id="screen-step2" class="hidden">
+        <div class="assignment-box">
+            <h3>Stap 2: Samenstellingen & Samengestelde Werkwoorden</h3>
+            <p><b>Doel:</b> Correcte spelling van politie-gerelateerde vaktermen en werkwoordvervoegingen.</p>
+            <p>Verbeter de zin: let op spaties en koppeltekens.</p>
+        </div>
+        <div class="timer" id="timer2">30</div>
+        <h2 id="sentence2">Laden...</h2>
+        <input type="text" id="input2" placeholder="Typ de verbeterde zin...">
+        <button class="btn btn-blue" id="send2">Verzend Antwoord</button>
+        <div class="arena" id="arena2"></div>
+    </div>
+
+    <div id="screen-step3" class="hidden">
+        <div class="assignment-box">
+            <h3>Stap 3: Redenen van Wetenschap (Drugsvondst)</h3>
+            <p><b>Doel:</b> Objectief verbaliseren wat je waarneemt (zien, horen, voelen, ruiken).</p>
+        </div>
         
-        <div id="step-3A">
-            <h3>Vraag 3A: Theorie</h3>
-            <p><strong>Wat leg je vast in je proces-verbaal van bevindingen, wanneer je drugs aantreft?</strong></p>
-            <small>Tip: Raadpleeg je Zakboek Proces-verbaal en Bewijsrecht.</small>
-            <input type="text" id="q3a-input" placeholder="Uw antwoord...">
-            <button onclick="app.submitPVPart('A')">Bevestig</button>
+        <div id="step3A">
+            <p><b>Vraag 3A:</b> Wat leg je vast in je proces-verbaal van bevindingen, wanneer je drugs aantreft?</p>
+            <p><small><i>Tip: Kijk in het Zakboek Proces-verbaal en Bewijsrecht.</i></small></p>
+            <textarea id="input3A" placeholder="Geef hier kort antwoord..."></textarea>
+            <button class="btn btn-blue" id="send3A">Verzend Antwoord</button>
         </div>
 
-        <div id="step-3B" class="hidden">
-            <h3>Vraag 3B: Casus "De Geur van Hennep"</h3>
-            <p><strong>Situatie:</strong> Tijdens een verkeerscontrole op de A12 stop je een voertuig. Je ruikt een sterke, kenmerkende geur van hennep. Onder de bijrijdersstoel vind je een doorzichtige gripzak met een groene, gedroogde, plantaardige substantie.</p>
-            <p><em>Opdracht: Beschrijf de vondst objectief in redenen van wetenschap.</em></p>
-            <textarea id="q3b-input" placeholder="Ik zag dat... Ik rook dat..."></textarea>
-            <button onclick="app.submitPVPart('B')">Publiceer Verslag</button>
-        </div>
-
-        <div id="live-pv-area">
-            <h3>Gepubliceerde Verslagen</h3>
+        <div id="step3B" class="hidden">
+            <hr>
+            <h4>Casus: Verkeerscontrole Stationstraat</h4>
+            <p>Je controleert een voertuig. In het dashboardkastje vind je een doorzichtig gripzakje met een groene, gedroogde plantachtige substantie. Het ruikt sterk naar hennep. De bestuurder is nerveus.</p>
+            <p><b>Opdracht:</b> Werk de bevindingen uit in <b>redenen van wetenschap</b>.</p>
+            <textarea id="input3B" style="height: 150px;" placeholder="Ter plaatse zag ik..."></textarea>
+            <button class="btn btn-success" id="send3B">Publiceer PV</button>
+            
+            <h3>Live Feed & Feedback</h3>
             <div id="pv-feed"></div>
         </div>
     </div>
 
-    <div id="docent-controls" class="hidden">
-        <button class="btn-reset" onclick="app.resetStep()">Reset Huidige Stap</button>
-        <button id="next-q-btn" onclick="app.nextQuestion()">Volgende Zin</button>
-    </div>
-
-    <button id="nav-next" class="btn-next hidden" onclick="app.nextStep()">Volgende Stap →</button>
+    <button class="btn btn-gold btn-next hidden" id="nextBtn">Volgende Stap &rarr;</button>
 </div>
 
 <script type="module">
@@ -225,204 +134,191 @@
         appId: "1:254845148285:web:2f922dfcb7f59d2c2aa514"
     };
 
-    const firebaseApp = initializeApp(firebaseConfig);
-    const db = getDatabase(firebaseApp);
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
 
-    const questionsStep1 = [
-        { q: "Ik heb de verdachte staande gehouden.", a: "Ik hield de verdachte staande." },
-        { q: "De getuige heeft een verklaring afgelegd.", a: "De getuige legde een verklaring af." },
-        { q: "Wij zijn ter plaatse gekomen.", a: "Wij kwamen ter plaatse." },
-        { q: "De agent heeft de boeien omgedaan.", a: "De agent deed de boeien om." },
-        { q: "Ik heb de pepperspray gebruikt.", a: "Ik gebruikte de pepperspray." },
-        { q: "De bestuurder is weggereden.", a: "De bestuurder reed weg." },
-        { q: "Hij heeft het bevel genegeerd.", a: "Hij negeerde het bevel." },
-        { q: "Wij hebben de auto doorzocht.", a: "Wij doorzochten de auto." },
-        { q: "De verdachte heeft bekend.", a: "De verdachte bekende." },
-        { q: "Ik heb assistentie gevraagd.", a: "Ik vroeg assistentie." }
+    // Variabelen
+    let currentUser = "";
+    let currentClass = "";
+    let currentStep = 1;
+    let qIndex = 0;
+    let timerInterval;
+
+    const sentencesOVT = [
+        "De verdachte heeft de ruit ingeslagen.",
+        "Ik heb de man direct aangehouden.",
+        "Collega's zijn ter plaatse gekomen.",
+        "De getuige heeft een verklaring afgelegd.",
+        "De auto is met hoge snelheid weggereden.",
+        "Wij hebben het voertuig doorzocht.",
+        "De agent heeft pepperspray gebruikt.",
+        "Het slachtoffer heeft om hulp geroepen.",
+        "De verdachte is over het hek geklommen.",
+        "Wij hebben de messen in beslag genomen."
     ];
 
-    const questionsStep2 = [
-        { q: "De adem analyse test was positief.", a: "De ademanalysetest was positief." },
-        { q: "Het proces verbaal is opgemaakt.", a: "Het proces-verbaal is opgemaakt." },
-        { q: "De verdachte wilde mee werken.", a: "De verdachte wilde meewerken." },
-        { q: "Hij gaf een vals identiteits bewijs.", a: "Hij gaf een vals identiteitsbewijs." },
-        { q: "De recherche is de drugs afval aan het ruimen.", a: "De recherche is het drugsafval aan het ruimen." },
-        { q: "Ik gaf hem een stop teken.", a: "Ik gaf hem een stopteken." },
-        { q: "Hij wilde de boete niet betalen.", a: "Hij wilde de boete niet betalen." },
-        { q: "De hoofd inspecteur kwam langs.", a: "De hoofdinspecteur kwam langs." },
-        { q: "Er was sprake van huis vrede breuk.", a: "Er was sprake van huisvredebreuk." },
-        { q: "De dader is aan gehouden.", a: "De dader is aangehouden." }
+    const sentencesSamen = [
+        "De aspirantagent schrijft een procesverbaal.",
+        "Er is een drugsvondst gedaan bij de verkeers controle.",
+        "De heren handhavers voeren het handhavings beleid uit.",
+        "Het plaats delict is afgezet met lint.",
+        "De surveillance wagen rijdt door de binnen stad.",
+        "Wij hebben drie bivak mutsen gevonden.",
+        "De verdachte is een veel pleger.",
+        "Er is sprake van een heter daad situatie.",
+        "De politie academie bevindt zich in Apeldoorn.",
+        "De adem analyse test is positief uitgevoerd."
     ];
 
-    const app = {
-        user: null,
-        currentStep: 0,
-        currentQIndex: 0,
-        timer: 30,
-        timerInterval: null,
+    // --- Core Logic ---
 
-        login: () => {
-            const name = document.getElementById('user-name').value;
-            const klas = document.getElementById('class-select').value;
-            if(!name || !klas) return alert("Naam en klas verplicht!");
-            
-            app.user = { name, klas, isDocent: name === "DOCENT" };
-            if(app.user.isDocent) document.getElementById('docent-controls').classList.remove('hidden');
-            
-            app.nextStep();
-        },
+    function showScreen(step) {
+        document.querySelectorAll('.container > div').forEach(div => div.classList.add('hidden'));
+        document.getElementById(`screen-step${step}`).classList.remove('hidden');
+        if(step < 3) startTimer(step);
+        if(step === 3) document.getElementById('nextBtn').classList.add('hidden');
+        else document.getElementById('nextBtn').classList.remove('hidden');
+    }
 
-        nextStep: () => {
-            document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
-            app.currentStep++;
-            document.getElementById(`step-${app.currentStep}`).classList.add('active');
-            
-            if(app.currentStep < 3) {
-                app.loadQuestion();
-                app.startTimer();
+    function startTimer(step) {
+        clearInterval(timerInterval);
+        let timeLeft = 30;
+        const timerEl = document.getElementById(`timer${step}`);
+        timerInterval = setInterval(() => {
+            timeLeft--;
+            timerEl.innerText = timeLeft;
+            if(timeLeft <= 0) {
+                nextQuestion();
             }
-            if(app.currentStep === 3) {
-                document.getElementById('nav-next').classList.add('hidden');
-                app.listenToPV();
-            }
-        },
+        }, 1000);
+    }
 
-        loadQuestion: () => {
-            const list = app.currentStep === 1 ? questionsStep1 : questionsStep2;
-            const q = list[app.currentQIndex];
-            document.getElementById(`q${app.currentStep}-text`).innerText = q.q;
-            document.getElementById(`q${app.currentStep}-input`).value = "";
-            app.listenToAnswers();
-        },
+    function nextQuestion() {
+        qIndex++;
+        if(qIndex >= 10) {
+            alert("Ronde voltooid! Klik op 'Volgende' voor de volgende stap.");
+            clearInterval(timerInterval);
+            return;
+        }
+        // Reset inputs & arena
+        document.getElementById('input1').value = "";
+        document.getElementById('input2').value = "";
+        remove(ref(db, `live/step${currentStep}`));
+        updateQuestionDisplay();
+        startTimer(currentStep);
+    }
 
-        startTimer: () => {
-            clearInterval(app.timerInterval);
-            app.timer = 30;
-            const display = document.getElementById(`timer-${app.currentStep}`);
-            app.timerInterval = setInterval(() => {
-                app.timer--;
-                display.innerText = app.timer;
-                if(app.timer <= 0) {
-                    clearInterval(app.timerInterval);
-                    if(app.user.isDocent) app.nextQuestion();
-                }
-            }, 1000);
-        },
+    function updateQuestionDisplay() {
+        if(currentStep === 1) document.getElementById('sentence1').innerText = sentencesOVT[qIndex];
+        if(currentStep === 2) document.getElementById('sentence2').innerText = sentencesSamen[qIndex];
+    }
 
-        submitAnswer: (step) => {
-            const ans = document.getElementById(`q${step}-input`).value;
-            const list = step === 1 ? questionsStep1 : questionsStep2;
-            const isCorrect = ans.trim().toLowerCase() === list[app.currentQIndex].a.toLowerCase();
-            
-            set(ref(db, `responses/step${step}/q${app.currentQIndex}/${app.user.name}`), {
-                ans, isCorrect, klas: app.user.klas
-            });
-        },
+    // --- Firebase Interactions ---
 
-        listenToAnswers: () => {
-            onValue(ref(db, `responses/step${app.currentStep}/q${app.currentQIndex}`), (snap) => {
-                const feed = document.getElementById(`feed-${app.currentStep}`);
-                feed.innerHTML = "";
-                const data = snap.val();
-                if(data) {
-                    Object.values(data).forEach(res => {
-                        const div = document.createElement('div');
-                        div.className = 'response-item';
-                        div.innerHTML = `<span>${res.klas} - ${res.ans}</span> <span class="${res.isCorrect ? 'correct' : ''}">${res.isCorrect ? '✓' : ''}</span>`;
-                        feed.appendChild(div);
-                    });
-                }
-            });
-        },
+    window.submitAnswer = (step) => {
+        const val = document.getElementById(`input${step}`).value;
+        if(!val) return;
+        set(ref(db, `live/step${step}/${currentUser}`), {
+            klas: currentClass,
+            tekst: val
+        });
+    };
 
-        nextQuestion: () => {
-            app.currentQIndex++;
-            if(app.currentQIndex >= 10) {
-                document.getElementById('nav-next').classList.remove('hidden');
-                alert("Ronde voltooid! Klik op 'Volgende Stap' om door te gaan.");
-            } else {
-                app.loadQuestion();
-                app.startTimer();
-            }
-        },
+    // --- Event Listeners ---
 
-        // Stap 3 Logica
-        submitPVPart: (part) => {
-            if(part === 'A') {
-                document.getElementById('step-3A').classList.add('hidden');
-                document.getElementById('step-3B').classList.remove('hidden');
-            } else {
-                const txt = document.getElementById('q3b-input').value;
-                push(ref(db, `pv_reports`), {
-                    name: app.user.name,
-                    klas: app.user.klas,
-                    text: txt,
-                    timestamp: Date.now()
-                });
-                document.getElementById('q3b-input').value = "";
-            }
-        },
+    document.getElementById('loginBtn').onclick = () => {
+        currentUser = document.getElementById('user-name').value;
+        currentClass = document.getElementById('class-select').value;
+        if(!currentUser || !currentClass) return alert("Vul alles in!");
+        document.getElementById('screen-login').classList.add('hidden');
+        showScreen(1);
+        updateQuestionDisplay();
+    };
 
-        listenToPV: () => {
-            onValue(ref(db, `pv_reports`), (snap) => {
-                const feed = document.getElementById('pv-feed');
-                feed.innerHTML = "";
-                const data = snap.val();
-                if(data) {
-                    Object.entries(data).forEach(([key, val]) => {
-                        const div = document.createElement('div');
-                        div.className = 'pv-output';
-                        div.innerHTML = `
-                            <strong>${val.klas} - ${val.name}</strong>
-                            <p>${val.text}</p>
-                            <div id="fb-list-${key}"></div>
-                            <div style="display:flex; gap:5px;">
-                                <input type="text" id="fb-in-${key}" placeholder="Geef feedback...">
-                                <button onclick="app.submitFeedback('${key}')">Stuur</button>
-                            </div>
-                        `;
-                        feed.appendChild(div);
-                        app.listenToFeedback(key);
-                    });
-                }
-            });
-        },
+    document.getElementById('send1').onclick = () => submitAnswer(1);
+    document.getElementById('send2').onclick = () => submitAnswer(2);
+    
+    document.getElementById('nextBtn').onclick = () => {
+        currentStep++;
+        qIndex = 0;
+        showScreen(currentStep);
+        updateQuestionDisplay();
+    };
 
-        submitFeedback: (pvId) => {
-            const fbTxt = document.getElementById(`fb-in-${pvId}`).value;
-            push(ref(db, `pv_reports/${pvId}/feedback`), {
-                name: app.user.name,
-                text: fbTxt
-            });
-            document.getElementById(`fb-in-${pvId}`).value = "";
-        },
-
-        listenToFeedback: (pvId) => {
-            onValue(ref(db, `pv_reports/${pvId}/feedback`), (snap) => {
-                const list = document.getElementById(`fb-list-${pvId}`);
-                list.innerHTML = "";
-                const data = snap.val();
-                if(data) {
-                    Object.values(data).forEach(fb => {
-                        const p = document.createElement('p');
-                        p.className = 'feedback-item';
-                        p.innerHTML = `<strong>${fb.name}:</strong> ${fb.text}`;
-                        list.appendChild(p);
-                    });
-                }
-            });
-        },
-
-        resetStep: () => {
-            if(!confirm("Weet je zeker dat je alle data voor deze stap wilt wissen?")) return;
-            const path = app.currentStep === 3 ? 'pv_reports' : `responses/step${app.currentStep}`;
-            remove(ref(db, path));
-            app.currentQIndex = 0;
-            if(app.currentStep < 3) app.loadQuestion();
+    document.getElementById('resetBtn').onclick = () => {
+        if(confirm("Weet je zeker dat je de hele database wilt legen?")) {
+            remove(ref(db));
+            location.reload();
         }
     };
 
-    window.app = app;
+    // Stap 3A & 3B
+    document.getElementById('send3A').onclick = () => {
+        const val = document.getElementById('input3A').value;
+        set(ref(db, `step3/answers3A/${currentUser}`), { klas: currentClass, tekst: val });
+        document.getElementById('step3A').classList.add('hidden');
+        document.getElementById('step3B').classList.remove('hidden');
+    };
+
+    document.getElementById('send3B').onclick = () => {
+        const val = document.getElementById('input3B').value;
+        push(ref(db, `step3/pv_posts`), {
+            naam: currentUser,
+            klas: currentClass,
+            tekst: val,
+            timestamp: Date.now()
+        });
+        document.getElementById('input3B').value = "";
+    };
+
+    window.giveFeedback = (postId) => {
+        const fb = prompt("Jouw feedback:");
+        if(!fb) return;
+        push(ref(db, `step3/pv_posts/${postId}/feedback`), {
+            van: currentUser,
+            tekst: fb
+        });
+    };
+
+    // --- Realtime Listeners ---
+
+    onValue(ref(db, `live/step1`), (snap) => {
+        const arena = document.getElementById('arena1');
+        arena.innerHTML = "";
+        snap.forEach(child => {
+            arena.innerHTML += `<div class="answer-card"><b>${child.key} (${child.val().klas}):</b><br>${child.val().tekst}</div>`;
+        });
+    });
+
+    onValue(ref(db, `live/step2`), (snap) => {
+        const arena = document.getElementById('arena2');
+        arena.innerHTML = "";
+        snap.forEach(child => {
+            arena.innerHTML += `<div class="answer-card"><b>${child.key} (${child.val().klas}):</b><br>${child.val().tekst}</div>`;
+        });
+    });
+
+    onValue(ref(db, `step3/pv_posts`), (snap) => {
+        const feed = document.getElementById('pv-feed');
+        feed.innerHTML = "";
+        snap.forEach(child => {
+            const post = child.val();
+            let fbHtml = "";
+            if(post.feedback) {
+                Object.values(post.feedback).forEach(f => {
+                    fbHtml += `<div class="feedback-item"><b>${f.van}:</b> ${f.tekst}</div>`;
+                });
+            }
+            feed.innerHTML += `
+                <div class="pv-post">
+                    <strong>Verbalisant ${post.naam} [${post.klas}]</strong>
+                    <p>${post.tekst}</p>
+                    <button class="btn btn-gold" onclick="giveFeedback('${child.key}')" style="padding:5px 10px; font-size:0.7em;">Geef Feedback</button>
+                    ${fbHtml}
+                </div>`;
+        });
+    });
+
 </script>
 </body>
 </html>
