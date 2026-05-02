@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Q3 BTV Les Opiumwetgeving</title>
+    <style>
+        :root {
+            --police-blue: #003366;
+            --police-gold: #c5a059;
+            --light-gray: #f4f4f9;
+            --danger: #dc3545;
+            --success: #198754;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background-color: var(--light-gray);
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        /* Navigatie & Header */
+        header {
+            background-color: var(--police-blue);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 4px solid var(--police-gold);
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background: #002244;
+            padding: 10px;
+            gap: 10px;
+        }
+
+        nav button {
+            background: transparent;
+            color: white;
+            border: 1px solid var(--police-gold);
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        nav button.active {
+            background: var(--police-gold);
+            color: var(--police-blue);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 20px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Utility classes */
+        .hidden { display: none; }
+        .reset-btn { background-color: var(--danger); color: white; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; float: right; margin-bottom: 10px; }
+        .goal-box { background: #fff9e6; border-left: 5px solid var(--police-gold); padding: 15px; margin-bottom: 20px; font-style: italic; }
+        
+        /* Forms & Inputs */
+        input, select, textarea { width: 100%; padding: 12px; margin: 10px 0; border-radius: 4px; border: 1px solid #ccc; box-sizing: border-box; font-size: 16px; }
+        button.primary { background-color: var(--police-blue); color: white; border: none; padding: 12px 25px; cursor: pointer; font-weight: bold; border-radius: 4px; }
+        button.primary:hover { opacity: 0.9; }
+
+        /* Step Specifics */
+        .live-feed { margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px; }
+        .post { background: #f9f9f9; border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 6px; }
+        .post-header { font-weight: bold; color: var(--police-blue); display: flex; justify-content: space-between; border-bottom: 1px solid #eee; margin-bottom: 10px; }
+        
+        .feedback-item { background: #eef4fb; padding: 8px; margin-top: 5px; border-radius: 4px; font-size: 0.9em; }
+
+        .scenario-box { background: #eef4fb; padding: 20px; border-radius: 6px; margin: 20px 0; border-left: 5px solid var(--police-blue); }
+
+        #login-screen { text-align: center; padding: 100px 20px; }
+        #login-screen .inner { max-width: 400px; margin: 0 auto; background: white; padding: 40px; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>BTV Live Training: Operationeel Rapporteren</h1>
+</header>
+
+<div id="login-screen">
+    <div class="inner">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Politie-embleem.svg/1200px-Politie-embleem.svg.png" alt="Logo" width="80">
+        <h2>Inloggen Verbalisanten</h2>
+        <input type="text" id="user-name" placeholder="Uw achternaam">
+        <select id="class-select">
+            <option value="">-- Selecteer NATO-klas --</option>
+            <option>ALPHA</option><option>BRAVO</option><option>CHARLIE</option>
+            <option>DELTA</option><option>ECHO</option><option>FOXTROT</option>
+            <option>GOLF</option><option>HOTEL</option><option>JULIET</option>
+            <option>KILO</option><option>LIMA</option><option>MIKE</option>
+        </select>
+        <button class="primary" onclick="app.login()">Start Dienst</button>
+    </div>
+</div>
+
+<div id="main-app" class="hidden">
+    <nav>
+        <button id="nav1" class="active" onclick="app.showStep(1)">Stap 1: OVT</button>
+        <button id="nav2" onclick="app.showStep(2)">Stap 2: Samenstellingen</button>
+        <button id="nav3" onclick="app.showStep(3)">Stap 3: Drugs & Wetenschap</button>
+    </nav>
+
+    <div class="container">
+        <div id="user-bar" style="margin-bottom: 20px; color: var(--police-gold); font-weight: bold;"></div>
+
+        <section id="step1">
+            <button class="reset-btn" onclick="app.reset('step1')">Reset Stap 1</button>
+            <div class="goal-box">
+                <strong>Opdracht 1:</strong> Zet de tekst om naar de Onvoltooid Verleden Tijd (OVT).<br>
+                <strong>Leerdoel:</strong> Correct gebruik van de OVT in ambtelijke verslaglegging voor een zakelijke en feitelijke toon.
+            </div>
+            
+            <div class="scenario-box">
+                <p><strong>Tekst in VTT (fout):</strong> "Ik heb de verdachte staande gehouden. Hij heeft zijn rijbewijs niet kunnen tonen. Ik heb hem daarop aangehouden."</p>
+                <p><em>Zet dit om naar OVT en wees de snelste van de klas!</em></p>
+            </div>
+
+            <textarea id="input1" placeholder="Schrijf hier uw tekst in OVT..."></textarea>
+            <button class="primary" onclick="app.submit(1)">Publiceer Live</button>
+
+            <div class="live-feed" id="feed1"></div>
+        </section>
+
+        <section id="step2" class="hidden">
+            <button class="reset-btn" onclick="app.reset('step2')">Reset Stap 2</button>
+            <div class="goal-box">
+                <strong>Opdracht 2:</strong> Maak correcte samenstellingen van de losse woorden.<br>
+                <strong>Leerdoel:</strong> Foutloos schrijven van complexe politietermen en samengestelde werkwoorden.
+            </div>
+
+            <div class="scenario-box">
+                <p>Combineer: <strong>[alcohol] + [gehalte]</strong> en <strong>[ter] + [plaatse] + [komen]</strong> en <strong>[stop] + [teken]</strong>.</p>
+            </div>
+
+            <input type="text" id="input2" placeholder="Typ de drie woorden correct achter elkaar...">
+            <button class="primary" onclick="app.submit(2)">Verstuur Antwoord</button>
+
+            <div class="live-feed" id="feed2"></div>
+        </section>
+
+        <section id="step3" class="hidden">
+            <button class="reset-btn" onclick="app.reset('step3')">Reset Database</button>
+            <div class="goal-box">
+                <strong>Opdracht 3:</strong> Drugs beschrijven in Redenen van Wetenschap.<br>
+                <strong>Leerdoel:</strong> Objectief waarnemingen vastleggen (zien, horen, ruiken, voelen) zonder directe conclusies te trekken.
+            </div>
+
+            <h3>Stap 3A: De Theorie</h3>
+            <p><em>Tip: Zoek in je 'Zakboek proces-verbaal en bewijsrecht'.</em></p>
+            <input type="text" id="input3a" placeholder="Wat leg je vast in je PV van bevindingen bij drugs?">
+
+            <hr>
+
+            <h3>Stap 3B: De Praktijkcasus</h3>
+            <div class="scenario-box">
+                <p><strong>Situatie:</strong> Tijdens een verkeerscontrole op de A2 zie je in het dashboardkastje een doorzichtig gripzakje liggen. Er zit een groene, gedroogde, plantachtige substantie in. Je ruikt een indringende, zoetige geur die je herkent als de geur van hennep. Het zakje weegt ongeveer 5 gram.</p>
+            </div>
+
+            <textarea id="input3b" placeholder="Beschrijf de vondst in redenen van wetenschap..."></textarea>
+            <button class="primary" onclick="app.submit(3)">Publiceer Verslag</button>
+
+            <div class="live-feed" id="feed3"></div>
+        </section>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+    // UW CONFIGURATIE
+    const firebaseConfig = {
+        apiKey: "AIzaSyCCTemDDut8gP3y_S8K4Ss6iVy9ND73aEo",
+        authDomain: "lessenbtvdocent.firebaseapp.com",
+        databaseURL: "https://lessenbtvdocent-default-rtdb.europe-west1.firebasedatabase.app/",
+        projectId: "lessenbtvdocent",
+        storageBucket: "lessenbtvdocent.firebasestorage.app",
+        messagingSenderId: "254845148285",
+        appId: "1:254845148285:web:2f922dfcb7f59d2c2aa514"
+    };
+
+    const firebaseApp = initializeApp(firebaseConfig);
+    const db = getDatabase(firebaseApp);
+
+    const app = {
+        user: { name: "", class: "" },
+
+        login() {
+            const n = document.getElementById('user-name').value;
+            const c = document.getElementById('class-select').value;
+            if(!n || !c) return alert("Naam en klas verplicht!");
+            this.user = { name: n, class: c };
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('main-app').classList.remove('hidden');
+            document.getElementById('user-bar').innerText = `Agent in opleiding: ${n} | Klas: ${c}`;
+            this.initListeners();
+        },
+
+        showStep(step) {
+            [1,2,3].forEach(s => {
+                document.getElementById(`step${s}`).classList.add('hidden');
+                document.getElementById(`nav${s}`).classList.remove('active');
+            });
+            document.getElementById(`step${step}`).classList.remove('hidden');
+            document.getElementById(`nav${step}`).classList.add('active');
+        },
+
+        async submit(step) {
+            let data = {
+                naam: this.user.name,
+                klas: this.user.class,
+                timestamp: Date.now()
+            };
+
+            if(step === 1) data.tekst = document.getElementById('input1').value;
+            if(step === 2) data.tekst = document.getElementById('input2').value;
+            if(step === 3) {
+                data.theorie = document.getElementById('input3a').value;
+                data.tekst = document.getElementById('input3b').value;
+            }
+
+            if(!data.tekst) return alert("Veld mag niet leeg zijn!");
+            await push(ref(db, `step${step}`), data);
+            
+            // Clear inputs
+            if(step === 1) document.getElementById('input1').value = "";
+            if(step === 2) document.getElementById('input2').value = "";
+            if(step === 3) {
+                document.getElementById('input3a').value = "";
+                document.getElementById('input3b').value = "";
+            }
+        },
+
+        async submitFeedback(postId) {
+            const fbText = document.getElementById(`fb-in-${postId}`).value;
+            if(!fbText) return;
+            await push(ref(db, `step3/${postId}/feedback`), {
+                naam: this.user.name,
+                klas: this.user.class,
+                tekst: fbText
+            });
+            document.getElementById(`fb-in-${postId}`).value = "";
+        },
+
+        reset(stepPath) {
+            if(confirm(`Weet je zeker dat je alle data van ${stepPath} wilt wissen?`)) {
+                remove(ref(db, stepPath));
+            }
+        },
+
+        initListeners() {
+            // Listeners voor elke stap
+            [1,2,3].forEach(s => {
+                onValue(ref(db, `step${s}`), (snapshot) => {
+                    const container = document.getElementById(`feed${s}`);
+                    container.innerHTML = "<h4>Live Antwoorden:</h4>";
+                    const data = snapshot.val();
+                    if(!data) return;
+
+                    Object.keys(data).reverse().forEach(key => {
+                        const item = data[key];
+                        const div = document.createElement('div');
+                        div.className = 'post';
+                        
+                        let html = `
+                            <div class="post-header">
+                                <span>${item.naam} [${item.klas}]</span>
+                                <span>${new Date(item.timestamp).toLocaleTimeString()}</span>
+                            </div>
+                            <p>${item.tekst}</p>
+                        `;
+
+                        if(s === 3) {
+                            html += `<p><strong>Theorie:</strong> ${item.theorie}</p><hr>`;
+                            html += `<strong>Feedback:</strong><div id="fb-list-${key}">`;
+                            if(item.feedback) {
+                                Object.values(item.feedback).forEach(f => {
+                                    html += `<div class="feedback-item"><strong>${f.naam}:</strong> ${f.tekst}</div>`;
+                                });
+                            }
+                            html += `</div>
+                                <div style="display:flex; gap:5px; margin-top:10px;">
+                                    <input type="text" id="fb-in-${key}" placeholder="Geef feedback..." style="margin:0;">
+                                    <button onclick="app.submitFeedback('${key}')">OK</button>
+                                </div>`;
+                        }
+                        div.innerHTML = html;
+                        container.appendChild(div);
+                    });
+                });
+            });
+        }
+    };
+
+    window.app = app; // Expose to global scope for button clicks
+</script>
+
+</body>
+</html>
