@@ -3,322 +3,352 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Q3 Les Opiumwetgeving</title>
+    <title>Interactieve Les: Proces-Verbaal van Bevindingen</title>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     <style>
         :root {
-            --police-blue: #003366;
-            --police-gold: #c5a059;
-            --light-gray: #f4f4f9;
+            --police-blue: #003399;
+            --police-gold: #ffcc00;
             --white: #ffffff;
-            --danger: #dc3545;
-            --success: #198754;
+            --light-grey: #f4f4f4;
         }
-
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--light-gray); margin: 0; padding: 0; color: #333; }
-        .container { max-width: 1000px; margin: 20px auto; background: var(--white); padding: 30px; border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); position: relative; }
-        
-        /* Header & Nav */
-        h1, h2, h3 { color: var(--police-blue); border-bottom: 2px solid var(--police-gold); padding-bottom: 10px; }
-        .assignment-box { background: #eef4fb; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 5px solid var(--police-blue); }
-        
-        /* UI Elements */
-        .hidden { display: none; }
-        .btn { padding: 12px 24px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; transition: 0.3s; }
-        .btn-blue { background: var(--police-blue); color: white; }
-        .btn-gold { background: var(--police-gold); color: white; }
-        .btn-danger { background: var(--danger); color: white; }
-        .btn-next { position: fixed; bottom: 20px; right: 20px; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        
-        /* Game Elements */
-        .timer { font-size: 24px; font-weight: bold; color: var(--danger); text-align: center; margin: 10px 0; }
-        .arena { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin-top: 20px; background: #f1f1f1; padding: 15px; border-radius: 8px; min-height: 100px; }
-        .answer-card { background: white; padding: 10px; border-radius: 4px; border: 1px solid #ddd; font-size: 0.9em; box-shadow: 2px 2px 5px rgba(0,0,0,0.05); animation: popIn 0.3s ease; }
-        .answer-card b { color: var(--police-blue); }
-
-        /* Feedback System */
-        .pv-post { border: 1px solid #ddd; padding: 15px; margin: 15px 0; border-radius: 8px; }
-        .feedback-item { margin-left: 20px; background: #fff9e6; padding: 8px; border-radius: 4px; font-size: 0.85em; margin-top: 5px; border-left: 3px solid var(--police-gold); }
-
-        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        
-        #login-screen { text-align: center; padding: 50px 0; }
-        input, select, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        body { font-family: 'Arial', sans-serif; margin: 0; background-color: var(--light-grey); color: #333; }
+        header { background-color: var(--police-blue); color: var(--white); padding: 20px; text-align: center; border-bottom: 5px solid var(--police-gold); }
+        .container { max-width: 900px; margin: 20px auto; background: var(--white); padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .step { display: none; }
+        .active { display: block; }
+        h2 { color: var(--police-blue); border-bottom: 2px solid var(--police-gold); padding-bottom: 10px; }
+        button { background-color: var(--police-blue); color: white; border: none; padding: 12px 20px; border-radius: 5px; cursor: pointer; font-size: 16px; transition: 0.3s; }
+        button:hover { background-color: #002266; }
+        input, select { padding: 10px; margin: 10px 0; width: 100%; box-sizing: border-box; border: 1px solid #ccc; border-radius: 5px; }
+        .nav-buttons { position: fixed; bottom: 20px; right: 20px; display: flex; gap: 10px; }
+        .feedback { margin-top: 15px; padding: 15px; border-radius: 5px; display: none; }
+        .correct { background-color: #d4edda; color: #155724; }
+        .incorrect { background-color: #f8d7da; color: #721c24; }
+        .scoreboard { margin-top: 20px; padding: 15px; background: #eee; border-radius: 5px; }
+        .competitive-list { list-style: none; padding: 0; }
+        .competitive-list li { padding: 8px; border-bottom: 1px solid #ddd; display: flex; justify-content: space-between; }
+        .admin-controls { margin-top: 50px; padding: 20px; border: 2px dashed red; }
     </style>
 </head>
 <body>
 
+<header>
+    <h1>Politieacademie: Beroepstaalvaardigheid</h1>
+    <p>Opleiding Politieagent - Proces-Verbaal van Bevindingen</p>
+</header>
+
 <div class="container">
-    <button class="btn btn-danger" style="position:absolute; top:10px; right:10px;" id="resetBtn">Docent: Reset Alles</button>
+    <div id="step-0" class="step active">
+        <h2>Login</h2>
+        <p>Selecteer je NATO-klas om te beginnen:</p>
+        <select id="nato-class">
+            <option value="">-- Kies klas --</option>
+            <option value="ALPHA">ALPHA</option>
+            <option value="BRAVO">BRAVO</option>
+            <option value="CHARLIE">CHARLIE</option>
+            <option value="DELTA">DELTA</option>
+            <option value="ECHO">ECHO</option>
+            <option value="FOXTROT">FOXTROT</option>
+            <option value="GOLF">GOLF</option>
+            <option value="HOTEL">HOTEL</option>
+            <option value="JULIETT">JULIETT</option>
+            <option value="KILO">KILO</option>
+            <option value="LIMA">LIMA</option>
+            <option value="MIKE">MIKE</option>
+        </select>
+        <button onclick="startLesson()">Start Les</button>
+    </div>
 
-    <div id="screen-login">
-        <h1>Q3 BTV Les Opiumwetgeving</h1>
-        <div id="login-screen">
-            <input type="text" id="user-name" placeholder="Achternaam Verbalisant">
-            <select id="class-select">
-                <option value="">-- Selecteer NATO-klas --</option>
-                <option>ALPHA</option><option>BRAVO</option><option>CHARLIE</option>
-                <option>DELTA</option><option>ECHO</option><option>FOXTROT</option>
-                <option>GOLF</option><option>HOTEL</option><option>JULIET</option>
-                <option>KILO</option><option>LIMA</option><option>MIKE</option>
-            </select>
-            <button class="btn btn-blue" id="loginBtn">Start Training</button>
+    <div id="step-1" class="step">
+        <h2>Stap 1: De Onvoltooid Verleden Tijd (OVT)</h2>
+        <p>In een PV beschrijf je gebeurtenissen achteraf. Gebruik de correcte OVT-vormen.</p>
+        <div id="ovt-exercise">
+            <p>1. De verdachte (lopen) <input type="text" id="ovt-1" placeholder="..."> door de Kerkstraat.</p>
+            <p>2. Ik (zien) <input type="text" id="ovt-2" placeholder="..."> dat hij een mes trok.</p>
+            <p>3. Wij (geven) <input type="text" id="ovt-3" placeholder="..."> de verdachte een stopteken.</p>
+            <button onclick="checkOVT()">Controleer & Verzenden</button>
+        </div>
+        <div id="ovt-feedback" class="feedback"></div>
+        <div class="scoreboard">
+            <h3>Klas Scorebord (OVT Snelheid/Correctheid)</h3>
+            <ul id="ovt-scores" class="competitive-list"></ul>
         </div>
     </div>
 
-    <div id="screen-step1" class="hidden">
-        <div class="assignment-box">
-            <h3>Stap 1: Onvoltooid Verleden Tijd (OVT)</h3>
-            <p><b>Doel:</b> Leer feiten in een PV te beschrijven in de OVT (verhalend) in plaats van de VTT.</p>
-            <p>Zet de onderstaande zin om naar de OVT. Snelheid telt!</p>
+    <div id="step-2" class="step">
+        <h2>Stap 2: Politie-Samenstellingen</h2>
+        <p>Combineer de woorden tot één correct geschreven politie-term.</p>
+        <div id="compounds-exercise">
+            <p>1. Proces + verbaal = <input type="text" id="comp-1"></p>
+            <p>2. Plaats + delict = <input type="text" id="comp-2"></p>
+            <p>3. Adres + onderzoek = <input type="text" id="comp-3"></p>
+            <button onclick="checkCompounds()">Verzenden</button>
         </div>
-        <div class="timer" id="timer1">30</div>
-        <h2 id="sentence1">Laden...</h2>
-        <input type="text" id="input1" placeholder="Typ hier de zin in OVT...">
-        <button class="btn btn-blue" id="send1">Verzend Antwoord</button>
-        <div class="arena" id="arena1"></div>
+        <div class="scoreboard">
+            <h3>Klas Klassement (Samenstellingen)</h3>
+            <ul id="comp-scores" class="competitive-list"></ul>
+        </div>
     </div>
 
-    <div id="screen-step2" class="hidden">
-        <div class="assignment-box">
-            <h3>Stap 2: Samenstellingen & Samengestelde Werkwoorden</h3>
-            <p><b>Doel:</b> Correcte spelling van politie-gerelateerde vaktermen en werkwoordvervoegingen.</p>
-            <p>Verbeter de zin: let op spaties en koppeltekens.</p>
+    <div id="step-3" class="step">
+        <h2>Stap 3: Theorie Quiz (Reader Bevindingen)</h2>
+        <p>Test je kennis van de reader "Proces-verbaal van bevindingen".</p>
+        <div id="quiz-container">
+            <div id="question-text" style="font-weight: bold; margin-bottom: 15px;"></div>
+            <div id="quiz-options"></div>
+            <p id="quiz-explanation" style="font-style: italic; color: #555; margin-top: 10px; display: none;"></p>
         </div>
-        <div class="timer" id="timer2">30</div>
-        <h2 id="sentence2">Laden...</h2>
-        <input type="text" id="input2" placeholder="Typ de verbeterde zin...">
-        <button class="btn btn-blue" id="send2">Verzend Antwoord</button>
-        <div class="arena" id="arena2"></div>
+        <div class="scoreboard">
+            <h3>Realtime Topscores (Klasse-niveau)</h3>
+            <ul id="quiz-scores" class="competitive-list"></ul>
+        </div>
     </div>
 
-    <div id="screen-step3" class="hidden">
-        <div class="assignment-box">
-            <h3>Stap 3: Redenen van Wetenschap (Drugsvondst)</h3>
-            <p><b>Doel:</b> Objectief verbaliseren wat je waarneemt (zien, horen, voelen, ruiken).</p>
-        </div>
+    <div id="step-4" class="step">
+        <h2>Stap 4: Redenen van Wetenschap - Drugs</h2>
+        <p><strong>4A:</strong> Waarom mag je <em>niet</em> direct opschrijven: "Ik zag dat de man cocaïne verkocht"?</p>
+        <textarea id="drugs-q-a" rows="3" style="width:100%"></textarea>
         
-        <div id="step3A">
-            <p><b>Vraag 3A:</b> Wat leg je vast in je proces-verbaal van bevindingen, wanneer je drugs aantreft?</p>
-            <p><small><i>Tip: Kijk in het Zakboek Proces-verbaal en Bewijsrecht.</i></small></p>
-            <textarea id="input3A" placeholder="Geef hier kort antwoord..."></textarea>
-            <button class="btn btn-blue" id="send3A">Verzend Antwoord</button>
-        </div>
-
-        <div id="step3B" class="hidden">
-            <hr>
-            <h4>Casus: Verkeerscontrole Stationstraat</h4>
-            <p>Je controleert een voertuig. In het dashboardkastje vind je een doorzichtig gripzakje met een groene, gedroogde plantachtige substantie. Het ruikt sterk naar hennep. De bestuurder is nerveus.</p>
-            <p><b>Opdracht:</b> Werk de bevindingen uit in <b>redenen van wetenschap</b>.</p>
-            <textarea id="input3B" style="height: 150px;" placeholder="Ter plaatse zag ik..."></textarea>
-            <button class="btn btn-success" id="send3B">Publiceer PV</button>
-            
-            <h3>Live Feed & Feedback</h3>
-            <div id="pv-feed"></div>
-        </div>
+        <p style="margin-top:20px;"><strong>4B (Casus):</strong> Je ziet een wit poeder in een gripzakje. Beschrijf dit objectief met redenen van wetenschap (zien, ruiken, voelen).</p>
+        <textarea id="drugs-casus" rows="5" style="width:100%"></textarea>
+        <button onclick="submitStep4()">Verstuur naar Docent</button>
+        <div id="step4-feedback" class="feedback"></div>
     </div>
 
-    <button class="btn btn-gold btn-next hidden" id="nextBtn">Volgende Stap &rarr;</button>
+    <div class="nav-buttons">
+        <button id="prevBtn" onclick="changeStep(-1)" style="display:none;">Vorige</button>
+        <button id="nextBtn" onclick="changeStep(1)" style="display:none;">Volgende Stap</button>
+    </div>
+
+    <div class="admin-controls" id="admin-panel" style="display:none;">
+        <h3>Docentenpaneel</h3>
+        <button onclick="resetClassData()" style="background-color:red;">Reset Alle Klasgegevens</button>
+    </div>
 </div>
 
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getDatabase, ref, set, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-
+<script>
+    // --- FIREBASE CONFIGURATIE ---
     const firebaseConfig = {
-        apiKey: "AIzaSyCCTemDDut8gP3y_S8K4Ss6iVy9ND73aEo",
-        authDomain: "lessenbtvdocent.firebaseapp.com",
-        databaseURL: "https://lessenbtvdocent-default-rtdb.europe-west1.firebasedatabase.app/",
-        projectId: "lessenbtvdocent",
-        storageBucket: "lessenbtvdocent.firebasestorage.app",
-        messagingSenderId: "254845148285",
-        appId: "1:254845148285:web:2f922dfcb7f59d2c2aa514"
+        databaseURL: "https://JOUW-PROJECT-ID.firebaseio.com", // VERVANG DIT DOOR EEN ECHTE DATABASE URL
     };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
+    let currentStep = 0;
+    let userClass = "";
+    let quizIndex = 0;
 
-    // Variabelen
-    let currentUser = "";
-    let currentClass = "";
-    let currentStep = 1;
-    let qIndex = 0;
-    let timerInterval;
-
-    const sentencesOVT = [
-        "De verdachte heeft de ruit ingeslagen.",
-        "Ik heb de man direct aangehouden.",
-        "Collega's zijn ter plaatse gekomen.",
-        "De getuige heeft een verklaring afgelegd.",
-        "De auto is met hoge snelheid weggereden.",
-        "Wij hebben het voertuig doorzocht.",
-        "De agent heeft pepperspray gebruikt.",
-        "Het slachtoffer heeft om hulp geroepen.",
-        "De verdachte is over het hek geklommen.",
-        "Wij hebben de messen in beslag genomen."
-    ];
-
-    const sentencesSamen = [
-        "De aspirantagent schrijft een procesverbaal.",
-        "Er is een drugsvondst gedaan bij de verkeers controle.",
-        "De heren handhavers voeren het handhavings beleid uit.",
-        "Het plaats delict is afgezet met lint.",
-        "De surveillance wagen rijdt door de binnen stad.",
-        "Wij hebben drie bivak mutsen gevonden.",
-        "De verdachte is een veel pleger.",
-        "Er is sprake van een heter daad situatie.",
-        "De politie academie bevindt zich in Apeldoorn.",
-        "De adem analyse test is positief uitgevoerd."
-    ];
-
-    // --- Core Logic ---
-
-    function showScreen(step) {
-        document.querySelectorAll('.container > div').forEach(div => div.classList.add('hidden'));
-        document.getElementById(`screen-step${step}`).classList.remove('hidden');
-        if(step < 3) startTimer(step);
-        if(step === 3) document.getElementById('nextBtn').classList.add('hidden');
-        else document.getElementById('nextBtn').classList.remove('hidden');
-    }
-
-    function startTimer(step) {
-        clearInterval(timerInterval);
-        let timeLeft = 30;
-        const timerEl = document.getElementById(`timer${step}`);
-        timerInterval = setInterval(() => {
-            timeLeft--;
-            timerEl.innerText = timeLeft;
-            if(timeLeft <= 0) {
-                nextQuestion();
-            }
-        }, 1000);
-    }
-
-    function nextQuestion() {
-        qIndex++;
-        if(qIndex >= 10) {
-            alert("Ronde voltooid! Klik op 'Volgende' voor de volgende stap.");
-            clearInterval(timerInterval);
-            return;
+    // --- QUIZ DATA UIT DE READER ---
+    const readerQuiz = [
+        {
+            q: "Wat zijn de drie hoofddoelen van een proces-verbaal?",
+            options: [
+                "Waarheidsvinding, bewijslast en strafvermindering",
+                "Waarheidsvinding, toezicht op de opsporing en naslag mogelijk maken",
+                "Identiteitscontrole, observatie en dossieropbouw"
+            ],
+            correct: 1,
+            exp: "Volgens de reader (p. 3) zijn de doelen: 1. waarheidsvinding, 2. toezicht op de opsporing en 3. naslag."
+        },
+        {
+            q: "Welke van de 7 Gouden W's kan vaak alleen door een verdachte worden beantwoord?",
+            options: ["Wanneer", "Waarmee", "Waarom"],
+            correct: 2,
+            exp: "De reader stelt op p. 4 dat de 'waarom-vraag' vaak alleen door de verdachte beantwoord kan worden."
+        },
+        {
+            q: "Wat wordt bedoeld met 'Redenen van Wetenschap'?",
+            options: [
+                "De wetenschappelijke onderbouwing van forensisch bewijs",
+                "Beschrijven via welke zintuigen (zien, horen, etc.) je tot een waarneming kwam",
+                "De juridische artikelen die je in het PV vermeldt"
+            ],
+            correct: 1,
+            exp: "Redenen van wetenschap geven aan hoe je aan die kennis komt, gebaseerd op zintuiglijke waarneming (p. 7)."
+        },
+        {
+            q: "Je ziet iemand een ruit ingooien. Wat is de correcte objectieve beschrijving?",
+            options: [
+                "Ik zag dat de man de ruit had ingegooid.",
+                "Ik zag dat de man een steen tegen de ruit gooide en ik hoorde glasgerinkel.",
+                "Ik zag dat de man opzettelijk vernieling pleegde."
+            ],
+            correct: 1,
+            exp: "Je kunt handelingen alleen waarnemen terwijl ze gebeuren (OVT). 'Had ingegooid' is een conclusie achteraf (p. 10)."
+        },
+        {
+            q: "Wanneer gebruik je de Onvoltooid Tegenwoordige Tijd (OTT) in een PV?",
+            options: [
+                "Voor de beschrijving van de gebeurtenis",
+                "Voor de omschrijving van het decor (hoe de omgeving eruitziet)",
+                "Nooit, een PV is altijd volledig in de verleden tijd"
+            ],
+            correct: 1,
+            exp: "De OTT wordt gebruikt voor algemene beschrijvingen van het decor (p. 9)."
+        },
+        {
+            q: "In een 'wij-pv' schrijf je algemene zaken in de wij-vorm. Hoe schrijf je gedetailleerde waarnemingen op?",
+            options: ["Altijd in de wij-vorm", "In de ik-vorm", "In de lijdende vorm"],
+            correct: 1,
+            exp: "Gedetailleerde beschrijvingen schrijf je altijd in de ik-vorm, omdat jij alleen je eigen waarneming kunt bevestigen (p. 8)."
+        },
+        {
+            q: "Mag je in een PV schrijven: 'Ik zag dat mijn collega de verdachte fouilleerde'?",
+            options: [
+                "Ja, als je ernaast stond",
+                "Alleen in uitzonderlijke situaties zoals bij verzet (art. 180 Sr)",
+                "Nee, je mag nooit over acties van collega's schrijven"
+            ],
+            correct: 1,
+            exp: "Alleen bij situaties als verzet kan de beschrijving van acties van een collega het strafbare feit ondersteunen (p. 9)."
+        },
+        {
+            q: "Wat is een kenmerk van objectief beschrijven?",
+            options: [
+                "Het vermelden van je professionele mening",
+                "Alleen feiten opschrijven waarover geen discussie mogelijk is",
+                "Conclusies direct koppelen aan de eerste zin"
+            ],
+            correct: 1,
+            exp: "Objectiviteit betekent neutraal opschrijven wat je ervaart zonder mening (p. 7)."
+        },
+        {
+            q: "Wat schrijf je op als je een man ziet die pijn lijkt te hebben?",
+            options: [
+                "Ik zag dat de man pijn had.",
+                "Ik zag dat de man zijn gezicht vertrok en hoorde hem 'au' roepen.",
+                "Het slachtoffer was duidelijk gewond."
+            ],
+            correct: 1,
+            exp: "Pijn is een conclusie. Het vertrokken gezicht en de uitroep zijn de feitelijke waarnemingen (p. 7)."
+        },
+        {
+            q: "Welke tijd gebruik je voor iets dat gebeurd is VÓÓR het moment dat je beschrijft?",
+            options: ["Onvoltooid Verleden Tijd (OVT)", "Voltooid Tegenwoordige Tijd (VTT)", "Voltooid Verleden Tijd (VVT)"],
+            correct: 2,
+            exp: "De VVT gebruik je voor zaken die al gebeurd waren voordat jouw waarneming begon (p. 10)."
         }
-        // Reset inputs & arena
-        document.getElementById('input1').value = "";
-        document.getElementById('input2').value = "";
-        remove(ref(db, `live/step${currentStep}`));
-        updateQuestionDisplay();
-        startTimer(currentStep);
+    ];
+
+    // --- LOGICA ---
+
+    function startLesson() {
+        userClass = document.getElementById('nato-class').value;
+        if(!userClass) return alert("Kies een klas!");
+        if(userClass === "ADMIN") document.getElementById('admin-panel').style.display = "block";
+        changeStep(1);
+        loadScores();
     }
 
-    function updateQuestionDisplay() {
-        if(currentStep === 1) document.getElementById('sentence1').innerText = sentencesOVT[qIndex];
-        if(currentStep === 2) document.getElementById('sentence2').innerText = sentencesSamen[qIndex];
+    function changeStep(delta) {
+        document.getElementById(`step-${currentStep}`).classList.remove('active');
+        currentStep += delta;
+        document.getElementById(`step-${currentStep}`).classList.add('active');
+        
+        document.getElementById('prevBtn').style.display = currentStep > 1 ? "block" : "none";
+        document.getElementById('nextBtn').style.display = (currentStep > 0 && currentStep < 4) ? "block" : "none";
+
+        if(currentStep === 3) loadQuizQuestion();
     }
 
-    // --- Firebase Interactions ---
+    function checkOVT() {
+        const answers = [
+            document.getElementById('ovt-1').value.toLowerCase().trim(),
+            document.getElementById('ovt-2').value.toLowerCase().trim(),
+            document.getElementById('ovt-3').value.toLowerCase().trim()
+        ];
+        const correct = ["liep", "zag", "gaven"];
+        let score = 0;
+        answers.forEach((a, i) => { if(a === correct[i]) score++; });
+        
+        db.ref(`lessons/POLICE_PV/ovt/${userClass}`).set({ score: score, timestamp: Date.now() });
+        alert(`Je score: ${score}/3. Resultaten gesynchroniseerd!`);
+    }
 
-    window.submitAnswer = (step) => {
-        const val = document.getElementById(`input${step}`).value;
-        if(!val) return;
-        set(ref(db, `live/step${step}/${currentUser}`), {
-            klas: currentClass,
-            tekst: val
+    function checkCompounds() {
+        const c1 = document.getElementById('comp-1').value.toLowerCase().trim();
+        const c2 = document.getElementById('comp-2').value.toLowerCase().trim();
+        const c3 = document.getElementById('comp-3').value.toLowerCase().trim();
+        let score = 0;
+        if(c1 === "proces-verbaal") score++; // Let op het streepje
+        if(c2 === "plaats delict" || c2 === "plaats-delict") score++;
+        if(c3 === "adresonderzoek") score++;
+
+        db.ref(`lessons/POLICE_PV/compounds/${userClass}`).set({ score: score });
+    }
+
+    function loadQuizQuestion() {
+        const data = readerQuiz[quizIndex];
+        document.getElementById('question-text').innerText = `Vraag ${quizIndex + 1}: ${data.q}`;
+        const optionsDiv = document.getElementById('quiz-options');
+        optionsDiv.innerHTML = "";
+        data.options.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.innerText = opt;
+            btn.style.display = "block";
+            btn.style.margin = "5px 0";
+            btn.style.width = "100%";
+            btn.onclick = () => selectQuizOption(i);
+            optionsDiv.appendChild(btn);
         });
-    };
+        document.getElementById('quiz-explanation').style.display = "none";
+    }
 
-    // --- Event Listeners ---
+    function selectQuizOption(idx) {
+        const data = readerQuiz[quizIndex];
+        const exp = document.getElementById('quiz-explanation');
+        exp.innerText = (idx === data.correct ? "Correct! " : "Onjuist. ") + data.exp;
+        exp.style.display = "block";
+        exp.className = idx === data.correct ? "feedback correct" : "feedback incorrect";
 
-    document.getElementById('loginBtn').onclick = () => {
-        currentUser = document.getElementById('user-name').value;
-        currentClass = document.getElementById('class-select').value;
-        if(!currentUser || !currentClass) return alert("Vul alles in!");
-        document.getElementById('screen-login').classList.add('hidden');
-        showScreen(1);
-        updateQuestionDisplay();
-    };
+        if(idx === data.correct) {
+            db.ref(`lessons/POLICE_PV/quiz/${userClass}`).transaction(current => {
+                return (current || 0) + 1;
+            });
+        }
 
-    document.getElementById('send1').onclick = () => submitAnswer(1);
-    document.getElementById('send2').onclick = () => submitAnswer(2);
-    
-    document.getElementById('nextBtn').onclick = () => {
-        currentStep++;
-        qIndex = 0;
-        showScreen(currentStep);
-        updateQuestionDisplay();
-    };
+        setTimeout(() => {
+            quizIndex++;
+            if(quizIndex < readerQuiz.length) loadQuizQuestion();
+            else alert("Quiz voltooid! Bekijk het klassement.");
+        }, 3000);
+    }
 
-    document.getElementById('resetBtn').onclick = () => {
-        if(confirm("Weet je zeker dat je de hele database wilt legen?")) {
-            remove(ref(db));
+    function submitStep4() {
+        const valA = document.getElementById('drugs-q-a').value;
+        const valB = document.getElementById('drugs-casus').value;
+        db.ref(`lessons/POLICE_PV/final/${userClass}`).push({ answerA: valA, answerB: valB });
+        alert("Je antwoorden zijn verstuurd naar de docent.");
+    }
+
+    function loadScores() {
+        // Realtime scoreborden
+        db.ref('lessons/POLICE_PV/ovt').on('value', snap => {
+            const list = document.getElementById('ovt-scores');
+            list.innerHTML = "";
+            snap.forEach(child => {
+                list.innerHTML += `<li><span>${child.key}</span> <span>${child.val().score} pnt</span></li>`;
+            });
+        });
+
+        db.ref('lessons/POLICE_PV/quiz').on('value', snap => {
+            const list = document.getElementById('quiz-scores');
+            list.innerHTML = "";
+            snap.forEach(child => {
+                list.innerHTML += `<li><span>${child.key}</span> <span>${child.val()} correct</span></li>`;
+            });
+        });
+    }
+
+    function resetClassData() {
+        if(confirm("Weet je zeker dat je alle scores wilt wissen?")) {
+            db.ref('lessons/POLICE_PV').remove();
             location.reload();
         }
-    };
-
-    // Stap 3A & 3B
-    document.getElementById('send3A').onclick = () => {
-        const val = document.getElementById('input3A').value;
-        set(ref(db, `step3/answers3A/${currentUser}`), { klas: currentClass, tekst: val });
-        document.getElementById('step3A').classList.add('hidden');
-        document.getElementById('step3B').classList.remove('hidden');
-    };
-
-    document.getElementById('send3B').onclick = () => {
-        const val = document.getElementById('input3B').value;
-        push(ref(db, `step3/pv_posts`), {
-            naam: currentUser,
-            klas: currentClass,
-            tekst: val,
-            timestamp: Date.now()
-        });
-        document.getElementById('input3B').value = "";
-    };
-
-    window.giveFeedback = (postId) => {
-        const fb = prompt("Jouw feedback:");
-        if(!fb) return;
-        push(ref(db, `step3/pv_posts/${postId}/feedback`), {
-            van: currentUser,
-            tekst: fb
-        });
-    };
-
-    // --- Realtime Listeners ---
-
-    onValue(ref(db, `live/step1`), (snap) => {
-        const arena = document.getElementById('arena1');
-        arena.innerHTML = "";
-        snap.forEach(child => {
-            arena.innerHTML += `<div class="answer-card"><b>${child.key} (${child.val().klas}):</b><br>${child.val().tekst}</div>`;
-        });
-    });
-
-    onValue(ref(db, `live/step2`), (snap) => {
-        const arena = document.getElementById('arena2');
-        arena.innerHTML = "";
-        snap.forEach(child => {
-            arena.innerHTML += `<div class="answer-card"><b>${child.key} (${child.val().klas}):</b><br>${child.val().tekst}</div>`;
-        });
-    });
-
-    onValue(ref(db, `step3/pv_posts`), (snap) => {
-        const feed = document.getElementById('pv-feed');
-        feed.innerHTML = "";
-        snap.forEach(child => {
-            const post = child.val();
-            let fbHtml = "";
-            if(post.feedback) {
-                Object.values(post.feedback).forEach(f => {
-                    fbHtml += `<div class="feedback-item"><b>${f.van}:</b> ${f.tekst}</div>`;
-                });
-            }
-            feed.innerHTML += `
-                <div class="pv-post">
-                    <strong>Verbalisant ${post.naam} [${post.klas}]</strong>
-                    <p>${post.tekst}</p>
-                    <button class="btn btn-gold" onclick="giveFeedback('${child.key}')" style="padding:5px 10px; font-size:0.7em;">Geef Feedback</button>
-                    ${fbHtml}
-                </div>`;
-        });
-    });
-
+    }
 </script>
+
 </body>
 </html>
